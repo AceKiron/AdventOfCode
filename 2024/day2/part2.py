@@ -44,5 +44,7 @@ if __name__ == "__main__":
                 safeCount += advanced(split)
             else:
                 safeCount += 1
+        else:
+            safeCount += advanced(split)
 
     print(safeCount)
