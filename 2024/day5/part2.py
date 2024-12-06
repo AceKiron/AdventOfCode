@@ -1,36 +1,31 @@
-def func(splitUpdate, m, l):
-    for i in range(m, l):
-        for j in range(i+1, l):
-            L = splitUpdate.copy()
-            L[i], L[j] = L[j], L[i]
+def func(splitUpdate, i):
+    for k in range(i, len(splitUpdate)):
+        rightOrder = True
+        L = splitUpdate.copy()
+        L[i], L[k] = L[k], L[i]
 
-            rightOrderFound = True
-
-            for k in range(l):
-                now = L[k]
-                after = L[k+1:]
+        for j in range(len(splitUpdate)):
+            now = L[j]
+            after = L[j+1:]
                 
-                for afterPart in after:
-                    if now not in section1Parsed:
-                        rightOrderFound = False
-                        break
-
-                    if afterPart not in section1Parsed[now]:
-                        rightOrderFound = False
-                        break
-            
-                if not rightOrderFound:
+            for afterPart in after:
+                if now not in section1Parsed:
+                    rightOrder = False
                     break
-            
-            if rightOrderFound:
-                return L, True
-            
-            y = func(L, i+1, l)
-            if y[1]:
-                return y
 
-    return None, False
+                if afterPart not in section1Parsed[now]:
+                    rightOrder = False
+                    break
 
+            if not rightOrder:
+                break
+        
+        if rightOrder:
+            return L
+        
+        if j > i:
+            return func(L, j)
+    
 if __name__ == "__main__":
     file = open("data.txt", "r")
     raw = file.read()
@@ -67,15 +62,17 @@ if __name__ == "__main__":
             for afterPart in after:
                 if now not in section1Parsed:
                     rightOrder = False
+                    y = func(splitUpdate, i-1)
+                    total += int(y[int(len(y) / 2)])
                     break
 
                 if afterPart not in section1Parsed[now]:
                     rightOrder = False
+                    y = func(splitUpdate, i-1)
+                    total += int(y[int(len(y) / 2)])
                     break
             
             if not rightOrder:
-                L, _ = func(splitUpdate, 0, len(splitUpdate))
-                total += int(L[int(len(L) / 2)])
                 break
-        
+            
     print(total)
